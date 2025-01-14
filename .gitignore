@@ -1,0 +1,9 @@
+
+## cassandra workbench
+.cassandraWorkbench.jsonc
+/.cassandraWorkbench
+
+## files copied from containers file systems
+/hadoop
+/spark_jars
+/jars
