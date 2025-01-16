@@ -26,13 +26,13 @@ ENV HOME="/" \
     OS_NAME="linux" \
     PATH="/opt/bitnami/python/bin:/opt/bitnami/java/bin:/opt/bitnami/spark/bin:/opt/bitnami/spark/sbin:$PATH"
 
-COPY ./bitnami/prebuildfs /
+COPY ./spark_image/prebuildfs /
 SHELL ["/bin/bash", "-o", "errexit", "-o", "nounset", "-o", "pipefail", "-c"]
 # Install required system packages and dependencies
 RUN install_packages ca-certificates curl libbz2-1.0 libcom-err2 libcrypt1 libffi8 libgcc-s1 libgssapi-krb5-2 libk5crypto3 libkeyutils1 libkrb5-3 libkrb5support0 liblzma5 libncursesw6 libnsl2 libreadline8 libsqlite3-0 libssl3 libstdc++6 libtinfo6 libtirpc3 procps zlib1g
 RUN mkdir -p /tmp/bitnami/pkg/cache/ ; cd /tmp/bitnami/pkg/cache/ ; \
     COMPONENTS=( \
-      "python-3.11.9-11-linux-${OS_ARCH}-debian-12" \
+      "python-3.12.8-0-linux-${OS_ARCH}-debian-12" \
       "java-11.0.24-9-1-linux-${OS_ARCH}-debian-12" \
       "spark-3.5.1-2-linux-${OS_ARCH}-debian-12" \
     ) ; \
@@ -54,7 +54,7 @@ RUN chmod g+rwX /opt/bitnami
 RUN find / -perm /6000 -type f -exec chmod a-s {} \; || true
 RUN mkdir /.local && chmod g+rwX /.local
 
-COPY ./bitnami/rootfs /
+COPY ./spark_image/rootfs /
 RUN /opt/bitnami/scripts/spark/postunpack.sh
 RUN /opt/bitnami/scripts/java/postunpack.sh
 ENV APP_VERSION="3.5.1" \
@@ -68,7 +68,7 @@ ENV APP_VERSION="3.5.1" \
     SPARK_HOME="/opt/bitnami/spark" \
     SPARK_USER="spark"
 
-COPY ./bitnami/requirements.txt requirements.txt
+COPY ./spark_image/requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
 
 WORKDIR /opt/bitnami/spark
