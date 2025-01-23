@@ -116,6 +116,14 @@ services:
     environment:
       - CASSANDRA_CLUSTER_NAME=MyCluster
 
+  prometheus:
+    image: prom/prometheus
+    hostname: prometheus1
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+
 volumes:
   hadoop_namenode:
   hadoop_datanode:
