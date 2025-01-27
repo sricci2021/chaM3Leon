@@ -124,6 +124,18 @@ services:
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
 
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
+
+
 volumes:
   hadoop_namenode:
   hadoop_datanode:
@@ -131,3 +143,4 @@ volumes:
   kafka1_data:
   zookeeper1_data:
   zookeeper1_datalog:
+  grafana-storage:
