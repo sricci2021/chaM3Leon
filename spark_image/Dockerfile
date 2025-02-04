@@ -46,7 +46,8 @@ RUN mkdir -p /tmp/bitnami/pkg/cache/ ; cd /tmp/bitnami/pkg/cache/ ; \
       rm -rf "${COMPONENT}".tar.gz{,.sha256} ; \
     done; \
     curl https://repo1.maven.org/maven2/org/apache/sedona/sedona-spark-shaded-3.5_2.12/1.6.0/sedona-spark-shaded-3.5_2.12-1.6.0.jar --output /opt/bitnami/spark/jars/sedona-spark-shaded-3.5_2.12-1.6.0.jar; \
-    curl https://repo1.maven.org/maven2/org/datasyslab/geotools-wrapper/1.6.0-28.2/geotools-wrapper-1.6.0-28.2.jar --output /opt/bitnami/spark/jars/geotools-wrapper-1.6.0-28.2.jar;
+    curl https://repo1.maven.org/maven2/org/datasyslab/geotools-wrapper/1.6.0-28.2/geotools-wrapper-1.6.0-28.2.jar --output /opt/bitnami/spark/jars/geotools-wrapper-1.6.0-28.2.jar; \
+    curl https://repo1.maven.org/maven2/pl/tkowalcz/tjahzi/log4j2-appender-nodep/0.9.32/log4j2-appender-nodep-0.9.32.jar --output /opt/bitnami/spark/jars/log4j2-appender-nodep-0.9.32.jar;
 RUN apt-get autoremove --purge -y curl && \
     apt-get update && apt-get upgrade -y && \
     apt-get clean && rm -rf /var/lib/apt/lists /var/cache/apt/archives
@@ -70,6 +71,12 @@ ENV APP_VERSION="3.5.1" \
 
 COPY ./spark_image/requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
+
+#ENV JAVA_TOOL_OPTIONS="-DapplicationName=my-spark-app"
+ENV CLASSPATH="/opt/bitnami/spark/jars/log4j2-appender-nodep-0.9.32.jar:$CLASSPATH"
+# Set environment variables for Log4j2
+ENV SPARK_DRIVER_EXTRA_JAVA_OPTIONS="-Dlog4j.configuration=file:/opt/bitnami/spark/conf/log4j2.properties"
+ENV SPARK_EXECUTOR_EXTRA_JAVA_OPTIONS="-Dlog4j.configuration=file:/opt/bitnami/spark/conf/log4j2.properties"
 
 WORKDIR /opt/bitnami/spark
 USER 1001

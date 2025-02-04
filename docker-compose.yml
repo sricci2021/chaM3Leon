@@ -135,6 +135,10 @@ services:
     depends_on:
       - prometheus
 
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
 
 volumes:
   hadoop_namenode:
