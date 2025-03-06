@@ -72,11 +72,7 @@ ENV APP_VERSION="3.5.1" \
 COPY ./spark_image/requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
 
-#ENV JAVA_TOOL_OPTIONS="-DapplicationName=my-spark-app"
 ENV CLASSPATH="/opt/bitnami/spark/jars/log4j2-appender-nodep-0.9.32.jar:$CLASSPATH"
-# Set environment variables for Log4j2
-ENV SPARK_DRIVER_EXTRA_JAVA_OPTIONS="-Dlog4j.configuration=file:/opt/bitnami/spark/conf/log4j2.properties"
-ENV SPARK_EXECUTOR_EXTRA_JAVA_OPTIONS="-Dlog4j.configuration=file:/opt/bitnami/spark/conf/log4j2.properties"
 
 WORKDIR /opt/bitnami/spark
 USER 1001
