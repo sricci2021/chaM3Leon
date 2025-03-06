@@ -97,7 +97,7 @@ services:
 
   spark-worker:
     build:
-      dockerfile: ./bitnami/Dockerfile
+      dockerfile: ./spark_image/Dockerfile
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER_URL=spark://spark-master:7077
