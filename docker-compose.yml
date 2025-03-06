@@ -75,6 +75,61 @@ services:
       - ./jars:/opt/bitnami/spark/extra_jars
       - ./conf:/opt/bitnami/spark/conf
       - ./hadoop:/opt/bitnami/hadoop
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    runtime: nvidia
+    shm_size: 1g
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      stack:
+        soft: 67108864
+        hard: 67108864
+    stdin_open: true
+    tty: true
+    pull_policy: always
+
+  spark-worker:
+    build:
+      dockerfile: ./bitnami/Dockerfile
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_WORKER_MEMORY=20G
+      - SPARK_WORKER_CORES=4
+      - SPARK_USER=spark
+      - SPARK_CONF_DIR=/opt/bitnami/spark/conf
+    depends_on:
+      - spark-master
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./conf:/opt/bitnami/spark/conf
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    runtime: nvidia
+    shm_size: 1g
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      stack:
+        soft: 67108864
+        hard: 67108864
+    stdin_open: true
+    tty: true
+    pull_policy: always
 
   zookeep1:
     image: zookeeper:3.4.14
