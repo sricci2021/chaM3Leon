@@ -1,9 +1,6 @@
 services:
   namenode:
-    image: apache/hadoop:3.3.6
-    build:
-      context: ./hadoop_image
-      dockerfile: Dockerfile
+    image: leonardodavinci03/hadoop
     hostname: namenode
     command: ["hdfs", "namenode"]
     ports:
@@ -17,10 +14,7 @@ services:
       - ./spark_jars:/opt/hadoop/dfs/spark/jars
 
   datanode:
-    image: apache/hadoop:3.3.6
-    build:
-      context: ./hadoop_image
-      dockerfile: Dockerfile
+    image: leonardodavinci03/hadoop
     command: ["hdfs", "datanode"]
     env_file:
       - ./hadoop_image/hadoop.env    
@@ -30,10 +24,7 @@ services:
       - hadoop_datanode:/opt/hadoop/dfs/data
 
   resourcemanager:
-    image: apache/hadoop:3.3.6
-    build:
-      context: ./hadoop_image
-      dockerfile: Dockerfile
+    image: leonardodavinci03/hadoop
     hostname: resourcemanager
     command: ["yarn", "resourcemanager"]
     ports:
@@ -45,10 +36,7 @@ services:
       - ./hadoop_image/hadoop.env
 
   nodemanager:
-    image: apache/hadoop:3.3.6
-    build:
-      context: ./hadoop_image
-      dockerfile: Dockerfile
+    image: leonardodavinci03/hadoop
     command: ["yarn", "nodemanager"]
     ports:
       - 8042:8042
@@ -60,21 +48,49 @@ services:
       - ./hadoop_image/hadoop.env
 
   spark-master:
-    build:
-      dockerfile: ./spark_image/Dockerfile
-    environment:
-      - SPARK_MODE=master
-      - SPARK_USER=spark
-      - SPARK_CONF_DIR=/opt/bitnami/spark/conf
-      - APP_ENV=local
+    image: leonardodavinci03/spark-connect
+    hostname: spark-master
     ports:
-      - "8080:8080"
       - "4040:4040"
-      - "18080:18080"
+      - "4041:4041"
+      - "8080:8080"
+      - "7077:7077"
+    environment:
+      - SPARK_MASTER_HOST=spark-master
+      - SPARK_MASTER_PORT=7077
+      - SPARK_MASTER_WEBUI_PORT=8080
+    entrypoint: 
+      - "bash"
+      - "-c"
+      - "/opt/spark/sbin/start-master.sh && tail -f /dev/null"
     volumes:
-      - ./jars:/opt/bitnami/spark/extra_jars
-      - ./conf:/opt/bitnami/spark/conf
-      - ./hadoop:/opt/bitnami/hadoop
+      - ./spark/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
+
+  spark-connect:
+    image: leonardodavinci03/spark-connect
+    hostname: spark-connect
+    ports:
+      - "15002:15002"
+    depends_on:
+      - spark-master
+    command: 
+      - "bash"
+      - "-c"
+      - "/opt/spark/sbin/start-connect-server.sh && tail -f /dev/null"
+    volumes:
+      - ./spark/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
+
+  spark-worker:
+    image: leonardodavinci03/spark-connect
+    hostname: spark-worker
+    depends_on:
+      - spark-master
+    entrypoint:
+      - "bash" 
+      - "-c"
+      - "/opt/spark/sbin/start-worker.sh spark://spark-master:7077 && tail -f /dev/null"
+    volumes:
+      - ./spark/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
 
   zookeep1:
     image: zookeeper:3.4.14
