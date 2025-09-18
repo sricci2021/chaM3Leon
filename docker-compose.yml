@@ -48,7 +48,9 @@ services:
       - ./hadoop_image/hadoop.env
 
   spark-master:
-    image: leonardodavinci03/spark-connect
+    build:
+      context: spark
+      dockerfile: Dockerfile
     hostname: spark-master
     ports:
       - "4040:4040"
@@ -65,9 +67,14 @@ services:
       - "/opt/spark/sbin/start-master.sh && tail -f /dev/null"
     volumes:
       - ./spark/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
+      - ./jars:/opt/spark/extra_jars
+      - ./conf:/opt/spark/conf
+      - ./hadoop:/opt/hadoop
 
   spark-connect:
-    image: leonardodavinci03/spark-connect
+    build:
+      context: spark
+      dockerfile: Dockerfile
     hostname: spark-connect
     ports:
       - "15002:15002"
@@ -81,7 +88,9 @@ services:
       - ./spark/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
 
   spark-worker:
-    image: leonardodavinci03/spark-connect
+    build:
+      context: spark
+      dockerfile: Dockerfile
     hostname: spark-worker
     depends_on:
       - spark-master

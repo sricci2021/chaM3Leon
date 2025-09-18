@@ -52,7 +52,7 @@
 ### 3.3 Copy Spark JAR Files
    - Copy Spark JAR files from the Spark Master container to the `spark_jars` directory:  
      ```bash
-     docker cp docker_cham3leon-spark-master-1:/opt/bitnami/spark/jars/. ./spark_jars
+     docker cp docker_cham3leon-spark-master-1:/opt/spark/jars/. ./spark_jars
      ```
 
 ### 3.4 Restart the Docker Containers
