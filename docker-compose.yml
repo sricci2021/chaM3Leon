@@ -1,6 +1,9 @@
 services:
   namenode:
-    image: leonardodavinci03/hadoop
+    image: apache/hadoop:3.3.6
+    build:
+      context: ./hadoop_image
+      dockerfile: Dockerfile
     hostname: namenode
     command: ["hdfs", "namenode"]
     ports:
@@ -14,7 +17,10 @@ services:
       - ./spark_jars:/opt/hadoop/dfs/spark/jars
 
   datanode:
-    image: leonardodavinci03/hadoop
+    image: apache/hadoop:3.3.6
+    build:
+      context: ./hadoop_image
+      dockerfile: Dockerfile
     command: ["hdfs", "datanode"]
     env_file:
       - ./hadoop_image/hadoop.env    
@@ -24,7 +30,10 @@ services:
       - hadoop_datanode:/opt/hadoop/dfs/data
 
   resourcemanager:
-    image: leonardodavinci03/hadoop
+    image: apache/hadoop:3.3.6
+    build:
+      context: ./hadoop_image
+      dockerfile: Dockerfile
     hostname: resourcemanager
     command: ["yarn", "resourcemanager"]
     ports:
@@ -36,7 +45,10 @@ services:
       - ./hadoop_image/hadoop.env
 
   nodemanager:
-    image: leonardodavinci03/hadoop
+    image: apache/hadoop:3.3.6
+    build:
+      context: ./hadoop_image
+      dockerfile: Dockerfile
     command: ["yarn", "nodemanager"]
     ports:
       - 8042:8042
