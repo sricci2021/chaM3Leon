@@ -1,9 +1,6 @@
 services:
   namenode:
-    image: apache/hadoop:3.3.6
-    build:
-      context: ./hadoop_image
-      dockerfile: Dockerfile
+    image: leonardodavinci03/hadoop
     hostname: namenode
     command: ["hdfs", "namenode"]
     ports:
@@ -17,10 +14,7 @@ services:
       - ./spark_jars:/opt/hadoop/dfs/spark/jars
 
   datanode:
-    image: apache/hadoop:3.3.6
-    build:
-      context: ./hadoop_image
-      dockerfile: Dockerfile
+    image: leonardodavinci03/hadoop
     command: ["hdfs", "datanode"]
     env_file:
       - ./hadoop_image/hadoop.env    
@@ -30,10 +24,7 @@ services:
       - hadoop_datanode:/opt/hadoop/dfs/data
 
   resourcemanager:
-    image: apache/hadoop:3.3.6
-    build:
-      context: ./hadoop_image
-      dockerfile: Dockerfile
+    image: leonardodavinci03/hadoop
     hostname: resourcemanager
     command: ["yarn", "resourcemanager"]
     ports:
@@ -45,10 +36,7 @@ services:
       - ./hadoop_image/hadoop.env
 
   nodemanager:
-    image: apache/hadoop:3.3.6
-    build:
-      context: ./hadoop_image
-      dockerfile: Dockerfile
+    image: leonardodavinci03/hadoop
     command: ["yarn", "nodemanager"]
     ports:
       - 8042:8042
@@ -60,9 +48,7 @@ services:
       - ./hadoop_image/hadoop.env
 
   spark-master:
-    build:
-      context: spark
-      dockerfile: Dockerfile
+    image: leonardodavinci03/spark-connect
     hostname: spark-master
     ports:
       - "4040:4040"
@@ -84,9 +70,7 @@ services:
       - ./hadoop:/opt/hadoop
 
   spark-connect:
-    build:
-      context: spark
-      dockerfile: Dockerfile
+    image: leonardodavinci03/spark-connect
     hostname: spark-connect
     ports:
       - "15002:15002"
@@ -100,9 +84,7 @@ services:
       - ./spark/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
 
   spark-worker:
-    build:
-      context: spark
-      dockerfile: Dockerfile
+    image: leonardodavinci03/spark-connect
     hostname: spark-worker
     depends_on:
       - spark-master
