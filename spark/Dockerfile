@@ -9,6 +9,11 @@ ADD https://jdbc.postgresql.org/download/postgresql-42.7.5.jar /opt/spark/jars/p
 
 RUN chmod -R +r /opt/spark/jars
 
+RUN curl https://repo1.maven.org/maven2/org/apache/sedona/sedona-spark-shaded-3.5_2.12/1.6.0/sedona-spark-shaded-3.5_2.12-1.6.0.jar --output /opt/spark/jars/sedona-spark-shaded-3.5_2.12-1.6.0.jar; \
+    curl https://repo1.maven.org/maven2/org/datasyslab/geotools-wrapper/1.6.0-28.2/geotools-wrapper-1.6.0-28.2.jar --output /opt/spark/jars/geotools-wrapper-1.6.0-28.2.jar; \
+    curl https://repo1.maven.org/maven2/pl/tkowalcz/tjahzi/log4j2-appender-nodep/0.9.32/log4j2-appender-nodep-0.9.32.jar --output /opt/spark/jars/log4j2-appender-nodep-0.9.32.jar;
+
+
 # AGGIUNTA: Imposta le variabili d'ambiente per il PATH di Spark
 ENV SPARK_HOME=/opt/spark
 ENV PATH=$SPARK_HOME/bin:$PATH
