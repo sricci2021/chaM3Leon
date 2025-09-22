@@ -40,7 +40,7 @@
 # - SPARK_EXECUTOR_MEMORY, Memory per Executor (e.g. 1000M, 2G) (Default: 1G)
 # - SPARK_DRIVER_MEMORY, Memory for Driver (e.g. 1000M, 2G) (Default: 1G)
 
-export HADOOP_CONF_DIR=/opt/bitnami/hadoop
+export HADOOP_CONF_DIR=/opt/hadoop
 export SPARK_DRIVER_MEMORY=1G
 
 # Options for the daemons used in the standalone deploy mode
