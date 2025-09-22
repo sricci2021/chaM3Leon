@@ -78,6 +78,8 @@
 ### 4.2 Set Permissions and Ownership for Spark
    - Ensure Spark has the required permissions and ownership:  
      ```bash
+     hdfs dfs -chown spark:spark /user/spark
+     hdfs dfs -chmod 755 /user/spark
      hdfs dfs -chmod -R 777 /user/spark/eventLog
      hdfs dfs -chown -R spark:hadoop /spark
      hdfs dfs -chmod -R 777 /spark

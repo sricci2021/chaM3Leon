@@ -28,7 +28,7 @@ services:
     hostname: resourcemanager
     command: ["yarn", "resourcemanager"]
     ports:
-      - 8088:8088
+      - 8032:8032
     depends_on:
       - namenode
       - datanode
@@ -48,7 +48,7 @@ services:
       - ./hadoop_image/hadoop.env
 
   spark-master:
-    image: leonardodavinci03/spark-connect
+    image: leonardodavinci03/spark-master
     hostname: spark-master
     ports:
       - "4040:4040"
@@ -70,7 +70,7 @@ services:
       - ./hadoop:/opt/hadoop
 
   spark-connect:
-    image: leonardodavinci03/spark-connect
+    image: leonardodavinci03/spark-master
     hostname: spark-connect
     ports:
       - "15002:15002"
@@ -84,7 +84,7 @@ services:
       - ./spark/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
 
   spark-worker:
-    image: leonardodavinci03/spark-connect
+    image: leonardodavinci03/spark-master
     hostname: spark-worker
     depends_on:
       - spark-master
