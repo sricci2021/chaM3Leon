@@ -12,6 +12,7 @@ services:
       - ./hadoop_image/hadoop.env
     environment:
       ENSURE_NAMENODE_DIR: "/opt/hadoop/dfs/name"
+      HADOOP_HOME: "/opt/hadoop" 
     volumes:
       - hadoop_namenode:/opt/hadoop/dfs/name
       - ./spark_jars:/opt/hadoop/dfs/spark/jars
@@ -23,7 +24,9 @@ services:
       dockerfile: Dockerfile
     command: ["hdfs", "datanode"]
     env_file:
-      - ./hadoop_image/hadoop.env    
+      - ./hadoop_image/hadoop.env
+    environment:
+      HADOOP_HOME: "/opt/hadoop" 
     depends_on:
       - namenode
     volumes:
@@ -37,7 +40,7 @@ services:
     hostname: resourcemanager
     command: ["yarn", "resourcemanager"]
     ports:
-      - 8032:8032
+      - 8088:8088
     depends_on:
       - namenode
       - datanode
@@ -58,6 +61,8 @@ services:
       - resourcemanager
     env_file:
       - ./hadoop_image/hadoop.env
+    environment:
+      HADOOP_HOME: "/opt/hadoop"
 
   spark-master:
     build:
