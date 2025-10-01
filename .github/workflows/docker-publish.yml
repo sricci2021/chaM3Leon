@@ -58,7 +58,6 @@ jobs:
           subject-name: ${{ env.REGISTRY }}/${{ env.SPARK_IMAGE_NAME}}
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
-		  
 
   build-and-push-hadoop-image:
     runs-on: ubuntu-latest
