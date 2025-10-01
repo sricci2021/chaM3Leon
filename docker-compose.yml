@@ -1,9 +1,6 @@
 services:
   namenode:
-    image: apache/hadoop:3.3.6
-    build:
-      context: ./hadoop_image
-      dockerfile: Dockerfile
+    image: ghcr.io/sricci2021/hadoop:1.0.0
     hostname: namenode
     command: ["hdfs", "namenode"]
     ports:
@@ -16,12 +13,8 @@ services:
     volumes:
       - hadoop_namenode:/opt/hadoop/dfs/name
       - ./spark_jars:/opt/hadoop/dfs/spark/jars
-
   datanode:
-    image: apache/hadoop:3.3.6
-    build:
-      context: ./hadoop_image
-      dockerfile: Dockerfile
+    image: ghcr.io/sricci2021/hadoop:1.0.0
     command: ["hdfs", "datanode"]
     env_file:
       - ./hadoop_image/hadoop.env
@@ -33,10 +26,7 @@ services:
       - hadoop_datanode:/opt/hadoop/dfs/data
 
   resourcemanager:
-    image: apache/hadoop:3.3.6
-    build:
-      context: ./hadoop_image
-      dockerfile: Dockerfile
+    image: ghcr.io/sricci2021/hadoop:1.0.0
     hostname: resourcemanager
     command: ["yarn", "resourcemanager"]
     ports:
@@ -46,12 +36,11 @@ services:
       - datanode
     env_file:
       - ./hadoop_image/hadoop.env
+    environment:
+      HADOOP_HOME: "/opt/hadoop"
 
   nodemanager:
-    image: apache/hadoop:3.3.6
-    build:
-      context: ./hadoop_image
-      dockerfile: Dockerfile
+    image: ghcr.io/sricci2021/hadoop:1.0.0
     command: ["yarn", "nodemanager"]
     ports:
       - 8042:8042
@@ -65,9 +54,7 @@ services:
       HADOOP_HOME: "/opt/hadoop"
 
   spark-master:
-    build:
-      context: spark
-      dockerfile: Dockerfile
+    image: ghcr.io/sricci2021/spark-worker:1.0.0
     hostname: spark-master
     ports:
       - "4040:4040"
@@ -89,9 +76,7 @@ services:
       - ./hadoop:/opt/hadoop
 
   spark-connect:
-    build:
-      context: spark
-      dockerfile: Dockerfile
+    image: ghcr.io/sricci2021/spark-worker:1.0.0
     hostname: spark-connect
     ports:
       - "15002:15002"
@@ -105,9 +90,7 @@ services:
       - ./spark/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
 
   spark-worker:
-    build:
-      context: spark
-      dockerfile: Dockerfile
+    image: ghcr.io/sricci2021/spark-worker:1.0.0
     hostname: spark-worker
     depends_on:
       - spark-master
