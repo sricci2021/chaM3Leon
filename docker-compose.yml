@@ -1,6 +1,6 @@
 services:
   namenode:
-    image: ghcr.io/sricci2021/hadoop:1.0.0
+    image: ghcr.io/sricci2021/hadoop:latest
     hostname: namenode
     command: ["hdfs", "namenode"]
     ports:
@@ -14,7 +14,7 @@ services:
       - hadoop_namenode:/opt/hadoop/dfs/name
       - ./spark_jars:/opt/hadoop/dfs/spark/jars
   datanode:
-    image: ghcr.io/sricci2021/hadoop:1.0.0
+    image: ghcr.io/sricci2021/hadoop:latest
     command: ["hdfs", "datanode"]
     env_file:
       - ./hadoop_image/hadoop.env
@@ -26,7 +26,7 @@ services:
       - hadoop_datanode:/opt/hadoop/dfs/data
 
   resourcemanager:
-    image: ghcr.io/sricci2021/hadoop:1.0.0
+    image: ghcr.io/sricci2021/hadoop:latest
     hostname: resourcemanager
     command: ["yarn", "resourcemanager"]
     ports:
@@ -40,7 +40,7 @@ services:
       HADOOP_HOME: "/opt/hadoop"
 
   nodemanager:
-    image: ghcr.io/sricci2021/hadoop:1.0.0
+    image: ghcr.io/sricci2021/hadoop:latest
     command: ["yarn", "nodemanager"]
     ports:
       - 8042:8042
@@ -53,8 +53,9 @@ services:
     environment:
       HADOOP_HOME: "/opt/hadoop"
 
+
   spark-master:
-    image: ghcr.io/sricci2021/spark-worker:1.0.0
+    image: ghcr.io/sricci2021/spark-worker:latest
     hostname: spark-master
     ports:
       - "4040:4040"
@@ -76,7 +77,7 @@ services:
       - ./hadoop:/opt/hadoop
 
   spark-connect:
-    image: ghcr.io/sricci2021/spark-worker:1.0.0
+    image: ghcr.io/sricci2021/spark-worker:latest
     hostname: spark-connect
     ports:
       - "15002:15002"
@@ -90,7 +91,7 @@ services:
       - ./spark/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
 
   spark-worker:
-    image: ghcr.io/sricci2021/spark-worker:1.0.0
+    image: ghcr.io/sricci2021/spark-worker:latest
     hostname: spark-worker
     depends_on:
       - spark-master
