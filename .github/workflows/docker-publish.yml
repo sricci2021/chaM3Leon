@@ -3,7 +3,7 @@ name: Build and publish Spark and Hadoop images
 on:
   push:
     branches: ['dev-update-spark']
-    
+
 env:
   REGISTRY: ghcr.io
 
@@ -35,7 +35,7 @@ jobs:
           push: true
           tags: |
             ${{ env.REGISTRY }}/${{ github.actor }}/spark-worker:latest
-            ${{ env.REGISTRY }}/$${{ github.actor }}/spark-worker:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ github.actor }}/spark-worker:${{ github.sha }}
           labels: |
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
 
@@ -65,7 +65,7 @@ jobs:
           file: ./hadoop_image/Dockerfile
           push: true
           tags: |
-            ${{ env.REGISTRY }}/$${{ github.actor }}/hadoop:latest
-            ${{ env.REGISTRY }}/$${{ github.actor }}/hadoop:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ github.actor }}/hadoop:latest
+            ${{ env.REGISTRY }}/${{ github.actor }}/hadoop:${{ github.sha }}
           labels: |
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
