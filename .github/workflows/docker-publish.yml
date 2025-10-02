@@ -3,16 +3,13 @@ name: Sync and Republish Docker Images
 on:
   push:
     branches:
-      - main
-      - master
-  schedule:
-    # Esegue automaticamente ogni giorno alle 2:00 AM UTC
-    - cron: '0 2 * * *'
+      - dev-registry
+
   workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_OWNER: sricci2021
+  IMAGE_OWNER: ${{ github.repository_owner }}
 
 jobs:
   sync-images:
@@ -25,9 +22,9 @@ jobs:
       matrix:
         image:
           - name: hadoop
-            source: ghcr.io/sricci2021/hadoop:latest
+            source: ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/hadoop:latest
           - name: spark-worker
-            source: ghcr.io/sricci2021/spark-worker:latest
+            source: ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/spark-worker:latest
 
     steps:
       - name: Log in to GitHub Container Registry
